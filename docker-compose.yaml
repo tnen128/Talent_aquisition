@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  milvus:
+    image: milvusdb/milvus:v2.2.9
+    container_name: milvus
+    ports:
+      - "19530:19530"
+    volumes:
+      - milvus_data:/var/lib/milvus
+    environment:
+      - MILVUS_LOG_LEVEL=debug
+
+  app:
+    build: .
+    container_name: talent_chatbot_app
+    ports:
+      - "8501:8501"
+    depends_on:
+      - milvus
+    volumes:
+      - .:/app
+
+volumes:
+  milvus_data:
